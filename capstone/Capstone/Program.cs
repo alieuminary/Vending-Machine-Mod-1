@@ -54,7 +54,11 @@ namespace Capstone
 
 
             // Display Main Menu
-            userMainMenu.MainMenuNav();
+            Console.WriteLine(userMainMenu.MenuSelect1);
+            Console.WriteLine(userMainMenu.MenuSelect2);
+            Console.WriteLine(userMainMenu.MenuSelect3);
+
+            string userInput = Console.ReadLine();
 
 
             //Display Products Menu
