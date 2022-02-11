@@ -13,25 +13,19 @@ namespace Capstone
 
         }
 
-        //public string MainMenuNav()
-        //{
-        //    string userInput = Console.ReadLine();
+        public string MainMenuNav(string selection)
+        {
 
-        //    if (userInput == "1")
-        //    {
+            Console.WriteLine(base.MenuSelect1);
+            Console.WriteLine(base.MenuSelect2);
+            Console.WriteLine(base.MenuSelect3);
 
-        //        return Console.WriteLine("DisplayMenu");
 
-        //    }
 
-        //    if (userInput == "2")
-        //    {
+            string userInput = Console.ReadLine();
+            return userInput;
+        }
 
-        //        return Console.WriteLine();
-
-        //    }
-             
-        //}
 
 
     }

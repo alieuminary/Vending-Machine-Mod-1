@@ -53,14 +53,8 @@ namespace Capstone
             double userMoney = 0;
 
 
-            //Main Menu
-
-
-            Console.WriteLine(userMainMenu.MenuSelect1);
-            Console.WriteLine(userMainMenu.MenuSelect2);
-            Console.WriteLine(userMainMenu.MenuSelect3);
-
-            string userInput = Console.ReadLine();
+            // Display Main Menu
+            userMainMenu.MainMenuNav();
 
 
             //Display Products Menu
@@ -167,8 +161,9 @@ namespace Capstone
                 else if (userInput == "3")
                 {
 
+                    Console.WriteLine("Good Bye");
                     Environment.Exit(0);
-                    Console.WriteLine();
+                    ;
                 }
 
             }
