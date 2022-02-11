@@ -13,17 +13,39 @@ namespace Capstone
 
         }
 
-        public string MainMenuNav(string selection)
+        public void MainMenuNav()
         {
+
+            Console.Clear();
 
             Console.WriteLine(base.MenuSelect1);
             Console.WriteLine(base.MenuSelect2);
             Console.WriteLine(base.MenuSelect3);
 
-
-
             string userInput = Console.ReadLine();
-            return userInput;
+            
+            switch (userInput)
+            {
+
+                case "1":
+                        break;
+
+                case "2":
+                    var purchaseMenu = new PurchaseMenu();
+                    purchaseMenu.PurchaseMenuNav();
+                    break;
+
+                case "3":
+                    Console.Clear();
+                    Console.WriteLine("_______________________________________________________");
+                    Console.WriteLine(" Umbrella Corp. appreciates your service. STAY HUNGRY! ");
+                    Console.WriteLine("*******************************************************");
+                    Environment.Exit(0);
+                    break;
+            }
+
+            MainMenuNav();
+
         }
 
 

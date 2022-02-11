@@ -30,7 +30,6 @@ namespace Capstone
 
 
 
-
         // message method
         public string SetMessage()
         {
