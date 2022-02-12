@@ -29,11 +29,12 @@ namespace Capstone
 
 
         //Stock Method
-        public void StockTheMachine()
+        public void StockTheMachine() // Needs to be relative
         {
-            string stockFile = "vendingmachine.csv";
-            string directory = @"C:\Users\Student\Desktop\Umbrell Corp Vending 1.0001\capstone";
-            string fullPath = Path.Combine(directory, stockFile);
+            const string relativeFileName = @"..\..\..\..\vendingmachine.csv";
+            string directory = Environment.CurrentDirectory;
+            string filename = Path.Combine(directory, relativeFileName);
+            string fullPath = Path.GetFullPath(filename);
 
 
 
