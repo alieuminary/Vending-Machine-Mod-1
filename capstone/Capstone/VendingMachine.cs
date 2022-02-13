@@ -5,31 +5,23 @@ using System.IO;
 
 namespace Capstone
 {
-    class VendingMachine
+    public class VendingMachine
     {
         // properties & attributes
 
         public double CurrentBalance { get; set; }
         public double TotalSpent { get; set; }
+        public string LogAction { get; set; }
+        public string AmountBeforeAction { get; set; }
 
         List<Product> Stock = new List<Product>();
 
 
-        // ========================= CONSTRUCTOR ================= //
-        //public VendingMachine(double balance)
-        //{
-        //    this.Balance = balance;
-        //}
-
-
-        // ========================= METHODS ===================== //
-
-        // customer inserts money into vending machine
 
 
 
         //Stock Method
-        public void StockTheMachine() // Needs to be relative
+        public void StockTheMachine()
         {
             const string relativeFileName = @"..\..\..\..\vendingmachine.csv";
             string directory = Environment.CurrentDirectory;
@@ -55,10 +47,13 @@ namespace Capstone
 
 
 
-        ///Financial Methods
+        ///Financial
         public void FeedMoney(int amountOfMoney)
         {
-            this.CurrentBalance += amountOfMoney;
+            AmountBeforeAction = CurrentBalance.ToString();
+            CurrentBalance += amountOfMoney;
+            LogAction = "FEED MONEY";
+            LogIt();
         }
         public void SpendMoney(double price)
         {
@@ -66,7 +61,7 @@ namespace Capstone
         }
 
 
-        //Display Methods
+        //Display
 
         public void MainMenu()
         {
@@ -195,7 +190,7 @@ namespace Capstone
                     break;
 
             }
-        } // We should display current balance here too.   
+        }
 
         public void FeedMoneyMenu()
         {
@@ -306,6 +301,8 @@ namespace Capstone
             {
                 if (slotCode.ToUpper() == product.SlotCode && product.Supply > 0 && product.Price < CurrentBalance)
                 {
+                    AmountBeforeAction = CurrentBalance.ToString();
+                    LogAction = $"{product.BrandName} {product.SlotCode}";
                     SpendMoney(product.Price);
                     product.Supply -= 1;
                     TotalSpent += product.Price;
@@ -315,6 +312,8 @@ namespace Capstone
                     Console.WriteLine($"Please retrieve your {product.BrandName} from the tray... {product.Message}");
                     Console.ResetColor();
                     Console.WriteLine();
+                    
+                    LogIt();
                 }
 
                 else if (slotCode.ToUpper() == product.SlotCode && product.Supply == 0)
@@ -390,10 +389,11 @@ namespace Capstone
 
 
 
-
-        //Return Change
+        //Return CHange
         public void FinishTransaction()
         {
+            AmountBeforeAction = CurrentBalance.ToString();
+            LogAction = "GIVE CHANGE";
             double changeToReturn = CurrentBalance * 100;
             double quarters = (int)(changeToReturn / 25);
 
@@ -423,7 +423,10 @@ namespace Capstone
             Console.WriteLine("Awaiting response...");
             Console.ResetColor();
 
+            LogIt();
+
             string returnToMain = Console.ReadLine();
+
 
             if (returnToMain == "y" || returnToMain == "Y")
             {
@@ -440,5 +443,26 @@ namespace Capstone
 
         }
 
+
+        //Log
+        public void LogIt()
+        {
+
+            const string relativeFileName = @"..\..\..\..\Log.txt";
+            string directory = Environment.CurrentDirectory;
+            string filename = Path.Combine(directory, relativeFileName);
+            string fullPath = Path.GetFullPath(filename);
+
+            DateTime now = DateTime.Now;
+
+            using (StreamWriter sw = File.AppendText(fullPath))
+            {
+
+                string logLine = $"{now.Date} {LogAction} ${AmountBeforeAction} ${CurrentBalance}";
+                
+                sw.WriteLine(logLine);
+            }
+
+        }
     }
 }
