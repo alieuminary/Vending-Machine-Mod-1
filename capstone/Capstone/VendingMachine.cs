@@ -72,10 +72,34 @@ namespace Capstone
         {
 
             Console.Clear();
+            Console.WriteLine("UMBRELLA CORP. PROUDLY PRESENTS THE");
+            Console.WriteLine(@" _ _              _            __ __        _    _        ___  ___  ___ 
+| | | ___ ._ _  _| | ___  ___ |  \  \ ___ _| |_ <_> ___  < . >|   ||   |
+| ' |/ ._>| ' |/ . |/ . \|___||     |<_> | | |  | |/ | ' / . \| / || / |
+|__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
 
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Type 1 to view all we have to offer.");
+            Console.WriteLine("Type 2 to insert money and make a purchase.");
+            Console.WriteLine("Type 3 to walk away.");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("(1) Display Vending Machine Items");
             Console.WriteLine("(2) Purchase");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("(3) Exit");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("***any and all unusual side-effects are purely coincidental***");
+
+
+
 
             string selection = Console.ReadLine();
 
@@ -101,33 +125,52 @@ namespace Capstone
         public void DisplayItems()
         {
             Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine("Feel free to stare at our delicious products as long as your heart desires...");
+            Console.WriteLine();
+            Console.WriteLine("***************************************");
+            Console.WriteLine("Press < ENTER > to return to Main Menu");
+            Console.WriteLine("***************************************");
+            Console.WriteLine();
+
+            Console.WriteLine("--------------------------------------");
 
             foreach (Product product in Stock)
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine(product.BrandName + " " + product.SlotCode);
+                Console.ResetColor();
             }
 
+            Console.WriteLine("--------------------------------------");
             Console.WriteLine();
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("(1) Return To Main Menu");
-            Console.WriteLine("-----------------------");
+            Console.WriteLine();
+            Console.WriteLine("**************************************");
+            Console.WriteLine("Press < ENTER > to return to Main Menu");
+            Console.WriteLine("**************************************");
+
             string returnToMain = Console.ReadLine();
 
-            if (returnToMain == "1")
-            {
-                MainMenu();
-            }
+            MainMenu();
 
-            DisplayItems();
         }
 
         public void PurchaseMenu()
         {
 
             Console.Clear();
-            Console.WriteLine("(1) Feed Money");
+            Console.WriteLine("Type 1 to insert money into the machine.");
+            Console.WriteLine("Type 2 to select and purchase products.");
+            Console.WriteLine("Type 3 to finish your transaction and recieve any change.");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("(1) Insert Money");
             Console.WriteLine("(2) Select Product");
+            Console.WriteLine();
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("(3) Finish Transaction");
+            Console.ResetColor();
 
             string selection = Console.ReadLine();
 
@@ -146,16 +189,26 @@ namespace Capstone
                     break;
 
             }
-        }
+        } // We should display current balance here too.   
 
         public void FeedMoneyMenu()
         {
             Console.Clear();
+            Console.WriteLine("Here, you can insert all of your moneis!");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine($"Money in Machine:  ${CurrentBalance}");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("(1) Insert $1");
             Console.WriteLine("(2) Insert $2");
             Console.WriteLine("(3) Insert $5");
             Console.WriteLine("(4) Insert $10");
+            Console.ResetColor();
+            Console.WriteLine();
 
             string selection = Console.ReadLine();
 
@@ -183,7 +236,9 @@ namespace Capstone
             Console.WriteLine();
             Console.WriteLine("... Spend wisely!");
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Do you want to add more money? (Y\\N)");
+            Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine("Awaiting response...");
 
@@ -207,62 +262,110 @@ namespace Capstone
 
             Console.Clear();
 
-            //Display Products
+
+            //Select Product Instructions
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("---------------------------------------------------------");
+            Console.WriteLine("To purchase a product: Type it's CODE, then press <ENTER>");
+            Console.WriteLine("---------------------------------------------------------");
+            Console.ResetColor();
+
+
+            //Display Products to choose from 
             foreach (Product product in Stock)
             {
-                Console.WriteLine("CODE: " + product.SlotCode + " || " + product.BrandName + ": $" + product.Price);
+                Console.WriteLine($"CODE: {product.SlotCode} | {product.BrandName}:  ${product.Price}");
             }
 
 
-            //Select Product
-            Console.WriteLine();
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Please choose a product by typing it's CODE");
-            Console.WriteLine("-------------------------------------------");
-
+            //User Selects Product
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("---------------------------------------------------------");
+            Console.WriteLine("To purchase a product: Type it's CODE, then press <ENTER>");
+            Console.WriteLine("---------------------------------------------------------");
+            Console.ResetColor();
 
             string slotCode = Console.ReadLine();
+            int warnings = 0;
 
-
-            //Buy Product
+            //Product is sold 
             foreach (Product product in Stock)
             {
-                if (slotCode == product.SlotCode && product.Supply > 0)
+                if (slotCode.ToUpper() == product.SlotCode && product.Supply > 0 && product.Price < CurrentBalance)
                 {
                     SpendMoney(product.Price);
                     product.Supply -= 1;
                     TotalSpent += product.Price;
 
                     Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine($"Please retrieve your {product.BrandName} from the tray... {product.Message}");
+                    Console.ResetColor();
                     Console.WriteLine();
                 }
 
-                else if (slotCode == product.SlotCode && product.Supply == 0)
+                else if (slotCode.ToUpper() == product.SlotCode && product.Supply == 0)
                 {
                     Console.WriteLine();
+                    Console.WriteLine($"{(product.BrandName).ToUpper()} IS");
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("---------");
                     Console.WriteLine("SOLD OUT!");
                     Console.WriteLine("---------");
+                    Console.ResetColor();
                     Console.WriteLine();
                 }
 
-            }
 
+                //Can we do something fun here where if they try to buy without the money more than once, we return a warning?
+                //Warning below ;)
+                else if (slotCode.ToUpper() == product.SlotCode && CurrentBalance < product.Price)
+                {
+                    warnings ++;
+
+                   if(warnings > 1)
+                    {
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("WARNING: Umbrella Corp DOES NOT tolerate dishonesty!");
+                        Console.WriteLine("***your SSN has been submitted for a background check***");
+                        Console.ResetColor();
+                    }
+
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"You DO NOT have enough money to purchase {product.BrandName}!");
+                    Console.ResetColor();
+                }
+
+
+            }
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine($"Money remaining in machine: ${CurrentBalance}");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("____________________________________________");
             Console.WriteLine();
             Console.WriteLine("Would you like to buy something else? (Y\\N)");
+            Console.WriteLine("____________________________________________");
+            Console.ResetColor();
+
+
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("Awaiting response...");
+            Console.ResetColor();
 
-            string buyMore = Console.ReadLine();
+            string buyMore = Console.ReadLine().ToUpper();
 
-            if (buyMore == "y" || buyMore == "Y")
+            if (buyMore == "Y")
             {
                 SelectAndBuyItem();
             }
 
-            else if (buyMore == "n" || buyMore == "N")
+            else if (buyMore == "N")
             {
                 PurchaseMenu();
             }
@@ -298,11 +401,15 @@ namespace Capstone
             Console.WriteLine();
             Console.WriteLine("Umbrella Corp thanks you for your monies.");
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("---------------------------");
             Console.WriteLine("Return to Main Menu? (Y\\N)");
             Console.WriteLine("---------------------------");
+            Console.ResetColor();
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("Awaiting response...");
+            Console.ResetColor();
 
             string returnToMain = Console.ReadLine();
 
