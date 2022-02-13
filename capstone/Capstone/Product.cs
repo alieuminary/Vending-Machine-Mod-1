@@ -11,6 +11,7 @@ namespace Capstone
         public double Price { get; set; }
         public string Type { get; set; }
         public int Supply { get; set; }
+        public string Message { get; set; }
 
 
         public Product(string[] lineFromStream)
@@ -20,10 +21,30 @@ namespace Capstone
             Price = double.Parse(lineFromStream[2]);
             Type = lineFromStream[3];
             Supply = 5;
+            
+
+            Message = " ";
+
+            if (Type == "Chip")
+            {
+                Message = "Crunch Crunch, Yum!";
+            }
+
+            else if (Type == "Candy")
+            {
+                Message = "Munch Munch, Yum!";
+            }
+
+            else if (Type == "Drink")
+            {
+                Message = "Glug Glug, Yum!";
+            }
+
+            else if (Type == "Gum")
+            {
+                Message = "Chew Chew, Yum!";
+            }
 
         }
-
-
-
     }
 }
