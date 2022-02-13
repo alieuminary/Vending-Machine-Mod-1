@@ -126,11 +126,14 @@ namespace Capstone
         {
             Console.Clear();
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("Feel free to stare at our delicious products as long as your heart desires...");
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("***************************************");
             Console.WriteLine("Press < ENTER > to return to Main Menu");
             Console.WriteLine("***************************************");
+            Console.ResetColor();
             Console.WriteLine();
 
             Console.WriteLine("--------------------------------------");
@@ -138,16 +141,19 @@ namespace Capstone
             foreach (Product product in Stock)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(product.BrandName + " " + product.SlotCode);
-                Console.ResetColor();
+                Console.Write($"{product.BrandName} ");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($" {product.Supply}/5 remaining");
+                Console.ResetColor();;
             }
 
             Console.WriteLine("--------------------------------------");
             Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("**************************************");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("***************************************");
             Console.WriteLine("Press < ENTER > to return to Main Menu");
-            Console.WriteLine("**************************************");
+            Console.WriteLine("***************************************");
+            Console.ResetColor();
 
             string returnToMain = Console.ReadLine();
 
@@ -265,6 +271,9 @@ namespace Capstone
 
             //Select Product Instructions
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine($"Money in Machine:  ${CurrentBalance}");
+            Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("To purchase a product: Type it's CODE, then press <ENTER>");
@@ -275,7 +284,10 @@ namespace Capstone
             //Display Products to choose from 
             foreach (Product product in Stock)
             {
-                Console.WriteLine($"CODE: {product.SlotCode} | {product.BrandName}:  ${product.Price}");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write($"CODE: {product.SlotCode}");
+                Console.ResetColor();
+                Console.WriteLine($" | {product.BrandName}:  ${product.Price}");
             }
 
 
