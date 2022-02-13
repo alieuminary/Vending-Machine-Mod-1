@@ -12,7 +12,7 @@ namespace Capstone
         public double CurrentBalance { get; set; }
         public double TotalSpent { get; set; }
         public string LogAction { get; set; }
-        public string AmountBeforeAction { get; set; }
+        public double AmountBeforeAction { get; set; }
 
         List<Product> Stock = new List<Product>();
 
@@ -50,11 +50,12 @@ namespace Capstone
         ///Financial
         public void FeedMoney(int amountOfMoney)
         {
-            AmountBeforeAction = CurrentBalance.ToString();
+            AmountBeforeAction = CurrentBalance;
             CurrentBalance += amountOfMoney;
-            LogAction = "FEED MONEY";
+            LogAction = "FEED MONEY:";
             LogIt();
         }
+
         public void SpendMoney(double price)
         {
             CurrentBalance -= price;
@@ -301,7 +302,7 @@ namespace Capstone
             {
                 if (slotCode.ToUpper() == product.SlotCode && product.Supply > 0 && product.Price < CurrentBalance)
                 {
-                    AmountBeforeAction = CurrentBalance.ToString();
+                    AmountBeforeAction = CurrentBalance;
                     LogAction = $"{product.BrandName} {product.SlotCode}";
                     SpendMoney(product.Price);
                     product.Supply -= 1;
@@ -392,8 +393,8 @@ namespace Capstone
         //Return CHange
         public void FinishTransaction()
         {
-            AmountBeforeAction = CurrentBalance.ToString();
-            LogAction = "GIVE CHANGE";
+            AmountBeforeAction = CurrentBalance;
+            LogAction = "GIVE CHANGE:";
             double changeToReturn = CurrentBalance * 100;
             double quarters = (int)(changeToReturn / 25);
 
