@@ -14,9 +14,11 @@ namespace Capstone
         public string LogAction { get; set; }
         public double AmountBeforeAction { get; set; }
 
-        List<Product> Stock = new List<Product>();
+        public List<Product> Stock = new List<Product>();
 
-
+        public int Quarter { get; set; }
+        public int Dime { get; set; }
+        public int Nickel { get; set; }
 
 
 
@@ -47,7 +49,7 @@ namespace Capstone
 
 
 
-        ///Financial
+        //Financial
         public void FeedMoney(int amountOfMoney)
         {
             AmountBeforeAction = CurrentBalance;
@@ -56,11 +58,33 @@ namespace Capstone
             LogIt();
         }
 
+
         public void SpendMoney(double price)
         {
             CurrentBalance -= price;
         }
 
+        public void TrackSpending(double productPrice)
+        {
+            TotalSpent += productPrice;
+        }
+
+
+        public void ReturnChange(double currentBalance)
+        {
+            double changeToReturn = currentBalance * 100;
+            Quarter = (int)(changeToReturn / 25);
+
+            changeToReturn -= (Quarter * 25);
+
+            Dime = (int)(changeToReturn / 10);
+
+            changeToReturn -= (Dime * 10);
+
+            Nickel = (int)(changeToReturn / 5);
+
+            CurrentBalance = 0;
+        }
 
         //Display
 
@@ -75,10 +99,10 @@ namespace Capstone
 |__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
 
             Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine("Type 1 to view all we have to offer.");
             Console.WriteLine("Type 2 to insert money and make a purchase.");
             Console.WriteLine("Type 3 to walk away.");
-            Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -140,7 +164,7 @@ namespace Capstone
                 Console.Write($"{product.BrandName} ");
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine($" {product.Supply}/5 remaining");
-                Console.ResetColor();;
+                Console.ResetColor(); ;
             }
 
             Console.WriteLine("--------------------------------------");
@@ -232,21 +256,17 @@ namespace Capstone
                     FeedMoney(10);
                     break;
             }
-           
+
             Console.Clear();
-            Console.WriteLine();
             Console.WriteLine($"Money in Machine:  ${CurrentBalance}");
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("... Spend wisely!");
             Console.WriteLine();
+            Console.WriteLine("... Spend wisely!");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Do you want to add more money? (Y\\N)");
             Console.ResetColor();
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("Awaiting response...");
-            Console.ResetColor();
 
             string addMoney = Console.ReadLine();
             if (addMoney == "y" || addMoney == "Y")
@@ -310,14 +330,14 @@ namespace Capstone
                     LogAction = $"{product.BrandName} {product.SlotCode}";
                     SpendMoney(product.Price);
                     product.Supply -= 1;
-                    TotalSpent += product.Price;
+                    TrackSpending(product.Price);
 
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine($"Please retrieve your {product.BrandName} from the tray... {product.Message}");
                     Console.ResetColor();
                     Console.WriteLine();
-                    
+
                     LogIt();
                 }
 
@@ -338,9 +358,9 @@ namespace Capstone
                 //Warning below ;)
                 else if (slotCode.ToUpper() == product.SlotCode && CurrentBalance < product.Price)
                 {
-                    warnings ++;
+                    warnings++;
 
-                   if(warnings > 1)
+                    if (warnings > 1)
                     {
                         Console.WriteLine();
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -397,24 +417,20 @@ namespace Capstone
         //Return CHange
         public void FinishTransaction()
         {
+            Console.Clear();
+            ReturnChange(CurrentBalance);
+
             AmountBeforeAction = CurrentBalance;
             LogAction = "GIVE CHANGE:";
-            double changeToReturn = CurrentBalance * 100;
-            double quarters = (int)(changeToReturn / 25);
 
-            changeToReturn -= (quarters * 25);
-
-            double dimes = (int)(changeToReturn / 10);
-
-            changeToReturn -= (dimes * 10);
-
-            double nickels = (int)(changeToReturn / 5);
 
 
             Console.WriteLine("Don't forget your change!");
-            Console.WriteLine($"Quarters: {quarters} Dimes: {dimes} Nickels: {nickels}");
+            Console.WriteLine($"Quarters: {Quarter}");
+            Console.WriteLine($"Dimes: {Dime}");
+            Console.WriteLine($"Nickels {Nickel}");
 
-            CurrentBalance = 0;
+
             Console.WriteLine();
             Console.WriteLine("Umbrella Corp thanks you for your monies.");
             Console.WriteLine();
@@ -464,7 +480,7 @@ namespace Capstone
             {
 
                 string logLine = $"{now.Date} {LogAction} ${AmountBeforeAction} ${CurrentBalance}";
-                
+
                 sw.WriteLine(logLine);
             }
 
