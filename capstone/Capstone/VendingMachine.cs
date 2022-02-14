@@ -75,10 +75,10 @@ namespace Capstone
 |__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
 
             Console.WriteLine();
-            Console.WriteLine();
             Console.WriteLine("Type 1 to view all we have to offer.");
             Console.WriteLine("Type 2 to insert money and make a purchase.");
             Console.WriteLine("Type 3 to walk away.");
+            Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -234,15 +234,19 @@ namespace Capstone
             }
            
             Console.Clear();
-            Console.WriteLine($"Money in Machine:  ${CurrentBalance}");
             Console.WriteLine();
+            Console.WriteLine($"Money in Machine:  ${CurrentBalance}");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.WriteLine("... Spend wisely!");
+            Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Do you want to add more money? (Y\\N)");
             Console.ResetColor();
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("Awaiting response...");
+            Console.ResetColor();
 
             string addMoney = Console.ReadLine();
             if (addMoney == "y" || addMoney == "Y")
