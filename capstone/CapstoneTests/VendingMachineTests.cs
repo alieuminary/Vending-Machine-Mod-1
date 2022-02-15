@@ -104,7 +104,7 @@ namespace CapstoneTests
             // Arrange
             VendingMachine vendoMatic = new VendingMachine();
             int expectedQuarter = 2; // .50
-            int expectedDime = 1; // .60
+            int expectedDime = 1; // .10
             int expectedNickel = 1; // .05
             double paramBalance = 0.65;
 

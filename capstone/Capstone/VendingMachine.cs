@@ -16,34 +16,50 @@ namespace Capstone
 
         public List<Product> Stock = new List<Product>();
 
+
+
         public int Quarter { get; set; }
         public int Dime { get; set; }
         public int Nickel { get; set; }
+
+        Logger Log = new Logger();
+
 
 
 
         //Stock Method
         public void StockTheMachine()
         {
-            const string relativeFileName = @"..\..\..\..\vendingmachine.csv";
-            string directory = Environment.CurrentDirectory;
-            string filename = Path.Combine(directory, relativeFileName);
-            string fullPath = Path.GetFullPath(filename);
-
-
-
-            using (StreamReader sr = new StreamReader(fullPath))
+            try
             {
 
-                while (!sr.EndOfStream)
-                {
-                    string line = sr.ReadLine();
-                    string[] itemInfo = line.Split('|');
+                const string relativeFileName = @"..\..\..\..\vendingmachine.csv";
+                string directory = Environment.CurrentDirectory;
+                string filename = Path.Combine(directory, relativeFileName);
+                string fullPath = Path.GetFullPath(filename);
 
-                    Stock.Add(new Product(itemInfo));
+
+
+                using (StreamReader sr = new StreamReader(fullPath))
+                {
+
+                    while (!sr.EndOfStream)
+                    {
+                        string line = sr.ReadLine();
+                        string[] itemInfo = line.Split('|');
+
+                        Stock.Add(new Product(itemInfo));
+
+                    }
 
                 }
 
+            }
+
+            catch (IOException e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine("File Not Found");
             }
         }
 
@@ -52,10 +68,10 @@ namespace Capstone
         //Financial
         public void FeedMoney(int amountOfMoney)
         {
-            AmountBeforeAction = CurrentBalance;
+            Log.AmountBeforeAction = CurrentBalance;
             CurrentBalance += amountOfMoney;
-            LogAction = "FEED MONEY:";
-            LogIt();
+            Log.LogAction = "FEED MONEY:";
+            Log.LogIt();
         }
 
 
@@ -85,6 +101,8 @@ namespace Capstone
 
             CurrentBalance = 0;
         }
+
+
 
         //Display
 
@@ -141,7 +159,7 @@ namespace Capstone
             }
 
         }
-
+         
         public void DisplayItems()
         {
             Console.Clear();
@@ -465,25 +483,5 @@ namespace Capstone
         }
 
 
-        //Log
-        public void LogIt()
-        {
-
-            const string relativeFileName = @"..\..\..\..\Log.txt";
-            string directory = Environment.CurrentDirectory;
-            string filename = Path.Combine(directory, relativeFileName);
-            string fullPath = Path.GetFullPath(filename);
-
-            DateTime now = DateTime.Now;
-
-            using (StreamWriter sw = File.AppendText(fullPath))
-            {
-
-                string logLine = $"{now.Date} {LogAction} ${AmountBeforeAction} ${CurrentBalance}";
-
-                sw.WriteLine(logLine);
-            }
-
-        }
     }
 }
