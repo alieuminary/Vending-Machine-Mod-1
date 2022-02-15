@@ -22,7 +22,7 @@ namespace Capstone
         public int Dime { get; set; }
         public int Nickel { get; set; }
 
-        Logger Log = new Logger();
+        //Logger Log = new Logger();
 
 
 
@@ -30,8 +30,6 @@ namespace Capstone
         //Stock Method
         public void StockTheMachine()
         {
-            try
-            {
 
                 const string relativeFileName = @"..\..\..\..\vendingmachine.csv";
                 string directory = Environment.CurrentDirectory;
@@ -39,7 +37,8 @@ namespace Capstone
                 string fullPath = Path.GetFullPath(filename);
 
 
-
+            try
+            {
                 using (StreamReader sr = new StreamReader(fullPath))
                 {
 
@@ -56,10 +55,15 @@ namespace Capstone
 
             }
 
-            catch (IOException e)
+            catch (FileNotFoundException e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
                 Console.WriteLine("File Not Found");
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("Directory Not Found");
             }
         }
 
@@ -68,10 +72,10 @@ namespace Capstone
         //Financial
         public void FeedMoney(int amountOfMoney)
         {
-            Log.AmountBeforeAction = CurrentBalance;
+            //AmountBeforeAction = CurrentBalance;
             CurrentBalance += amountOfMoney;
-            Log.LogAction = "FEED MONEY:";
-            Log.LogIt();
+            //Log.LogAction = "FEED MONEY:";
+            //Log.LogIt();
         }
 
 
@@ -342,10 +346,28 @@ namespace Capstone
             //Product is sold 
             foreach (Product product in Stock)
             {
+
+                //{
+                //    // Threw custom exception
+                //    try
+                //    {
+                //        if (slotCode != product.SlotCode)
+                //        {
+                //            throw new PurchaseCodeInvalidException($"'{slotCode}' is an invalid slot. Please enter a valid code! ");
+                //        }
+                //        break;
+                //    }
+                //    catch (PurchaseCodeInvalidException ex)
+                //    {
+                //        Console.Clear();
+                //        Console.WriteLine(ex.Message);
+                //    }
+                //}
+
                 if (slotCode.ToUpper() == product.SlotCode && product.Supply > 0 && product.Price < CurrentBalance)
                 {
-                    AmountBeforeAction = CurrentBalance;
-                    LogAction = $"{product.BrandName} {product.SlotCode}";
+                    //Log.AmountBeforeAction = CurrentBalance;
+                    //Log.LogAction = $"{product.BrandName} {product.SlotCode}";
                     SpendMoney(product.Price);
                     product.Supply -= 1;
                     TrackSpending(product.Price);
@@ -356,7 +378,7 @@ namespace Capstone
                     Console.ResetColor();
                     Console.WriteLine();
 
-                    LogIt();
+                    //Log.LogIt();
                 }
 
                 else if (slotCode.ToUpper() == product.SlotCode && product.Supply == 0)
@@ -438,8 +460,8 @@ namespace Capstone
             Console.Clear();
             ReturnChange(CurrentBalance);
 
-            AmountBeforeAction = CurrentBalance;
-            LogAction = "GIVE CHANGE:";
+            //Log.AmountBeforeAction = CurrentBalance;
+            //Log.LogAction = "GIVE CHANGE:";
 
 
 
@@ -462,7 +484,7 @@ namespace Capstone
             Console.WriteLine("Awaiting response...");
             Console.ResetColor();
 
-            LogIt();
+            //Log.LogIt();
 
             string returnToMain = Console.ReadLine();
 
@@ -482,6 +504,25 @@ namespace Capstone
 
         }
 
+        // Log
+        public void LogIt()
+        {
 
+            const string relativeFileName = @"..\..\..\..\Log.txt";
+            string directory = Environment.CurrentDirectory;
+            string filename = Path.Combine(directory, relativeFileName);
+            string fullPath = Path.GetFullPath(filename);
+
+            DateTime now = DateTime.Now;
+
+            using (StreamWriter sw = File.AppendText(fullPath))
+            {
+
+                string logLine = $"{now.Date} {LogAction} ${AmountBeforeAction} ${CurrentBalance}";
+
+                sw.WriteLine(logLine);
+            }
+
+        }
     }
 }

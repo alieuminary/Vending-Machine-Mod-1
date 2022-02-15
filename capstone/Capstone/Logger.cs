@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Capstone
 {
-    class Logger : VendingMachine
+    public class Logger : VendingMachine
     {
         string LogAction {get; set;}
         double AmountBeforeAction { get; set; }
