@@ -7,20 +7,16 @@ namespace Capstone
 {
     public class Logger : VendingMachine
     {
-        string LogAction {get; set;}
-        double AmountBeforeAction { get; set; }
-        double CurrentBalance { get; set; }
-
+        public string LogAction { get; set; }
+        public double AmountBeforeAction { get; set; }
+        public double AmountAfterAction { get; set; }
 
 
         public Logger()
         {
 
-            CurrentBalance = base.CurrentBalance;
 
         }
-
-
 
         public void LogIt()
         {
@@ -35,7 +31,7 @@ namespace Capstone
             using (StreamWriter sw = File.AppendText(fullPath))
             {
 
-                string logLine = $"{now.Date} {LogAction} ${AmountBeforeAction} ${CurrentBalance}";
+                string logLine = $"{now.Date} {LogAction} ${AmountBeforeAction} ${AmountAfterAction}";
 
                 sw.WriteLine(logLine);
             }

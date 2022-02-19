@@ -5,14 +5,13 @@ using System.IO;
 
 namespace Capstone
 {
+
     public class VendingMachine
     {
         // properties & attributes
 
         public double CurrentBalance { get; set; }
         public double TotalSpent { get; set; }
-        public string LogAction { get; set; }
-        public double AmountBeforeAction { get; set; }
 
         public List<Product> Stock = new List<Product>();
 
@@ -22,14 +21,14 @@ namespace Capstone
         public int Dime { get; set; }
         public int Nickel { get; set; }
 
-        //Logger Log = new Logger();
-
 
 
 
         //Stock Method
         public void StockTheMachine()
         {
+            try
+            {
 
                 const string relativeFileName = @"..\..\..\..\vendingmachine.csv";
                 string directory = Environment.CurrentDirectory;
@@ -37,8 +36,7 @@ namespace Capstone
                 string fullPath = Path.GetFullPath(filename);
 
 
-            try
-            {
+
                 using (StreamReader sr = new StreamReader(fullPath))
                 {
 
@@ -55,15 +53,10 @@ namespace Capstone
 
             }
 
-            catch (FileNotFoundException e)
+            catch (IOException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e);
                 Console.WriteLine("File Not Found");
-            }
-            catch (DirectoryNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine("Directory Not Found");
             }
         }
 
@@ -72,10 +65,13 @@ namespace Capstone
         //Financial
         public void FeedMoney(int amountOfMoney)
         {
-            //AmountBeforeAction = CurrentBalance;
+            Logger feedMoneyLog = new Logger();
+
+            feedMoneyLog.LogAction = "FEED MONEY:";
+            feedMoneyLog.AmountBeforeAction = CurrentBalance;
             CurrentBalance += amountOfMoney;
-            //Log.LogAction = "FEED MONEY:";
-            //Log.LogIt();
+            feedMoneyLog.AmountAfterAction = CurrentBalance;
+            feedMoneyLog.LogIt();
         }
 
 
@@ -114,17 +110,26 @@ namespace Capstone
         {
 
             Console.Clear();
+
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("UMBRELLA CORP. PROUDLY PRESENTS THE");
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(@" _ _              _            __ __        _    _        ___  ___  ___ 
 | | | ___ ._ _  _| | ___  ___ |  \  \ ___ _| |_ <_> ___  < . >|   ||   |
 | ' |/ ._>| ' |/ . |/ . \|___||     |<_> | | |  | |/ | ' / . \| / || / |
 |__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
 
+            Console.ResetColor();
             Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("INSTRUCTIONS :");
             Console.WriteLine();
             Console.WriteLine("Type 1 to view all we have to offer.");
             Console.WriteLine("Type 2 to insert money and make a purchase.");
-            Console.WriteLine("Type 3 to walk away.");
+            Console.WriteLine("Type 3 to walk away...");
+            Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -138,10 +143,9 @@ namespace Capstone
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("***any and all unusual side-effects are purely coincidental***");
-
-
-
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("*ANY AND ALL unusual side-effects are purely coincidental*");
+            Console.ResetColor();
 
             string selection = Console.ReadLine();
 
@@ -156,20 +160,41 @@ namespace Capstone
                     break;
 
                 case "3":
-                    Console.WriteLine("Goodbye");
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("Umbrella Corp. thanks you for your trust...");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Press any key to close this window.");
+                    Console.WriteLine(); Console.ForegroundColor = ConsoleColor.Black;
                     Environment.Exit(0);
                     break;
 
             }
 
         }
-         
+
         public void DisplayItems()
         {
             Console.Clear();
+
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("UMBRELLA CORP. PROUDLY PRESENTS THE");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(@" _ _              _            __ __        _    _        ___  ___  ___ 
+| | | ___ ._ _  _| | ___  ___ |  \  \ ___ _| |_ <_> ___  < . >|   ||   |
+| ' |/ ._>| ' |/ . |/ . \|___||     |<_> | | |  | |/ | ' / . \| / || / |
+|__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
+
+            Console.ResetColor();
+            Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("Feel free to stare at our delicious products as long as your heart desires...");
+
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("***************************************");
@@ -190,12 +215,14 @@ namespace Capstone
             }
 
             Console.WriteLine("--------------------------------------");
+
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("***************************************");
             Console.WriteLine("Press < ENTER > to return to Main Menu");
             Console.WriteLine("***************************************");
             Console.ResetColor();
+            Console.WriteLine();
 
             string returnToMain = Console.ReadLine();
 
@@ -205,11 +232,32 @@ namespace Capstone
 
         public void PurchaseMenu()
         {
-
             Console.Clear();
+
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("UMBRELLA CORP. PROUDLY PRESENTS THE");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(@" _ _              _            __ __        _    _        ___  ___  ___ 
+| | | ___ ._ _  _| | ___  ___ |  \  \ ___ _| |_ <_> ___  < . >|   ||   |
+| ' |/ ._>| ' |/ . |/ . \|___||     |<_> | | |  | |/ | ' / . \| / || / |
+|__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
+
+            Console.ResetColor();
+
+            Console.WriteLine();
+
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine($"Money in Machine: {CurrentBalance}");
+            Console.ResetColor(); Console.WriteLine();
+            Console.WriteLine("INSTRUCTIONS :");
+            Console.WriteLine();
             Console.WriteLine("Type 1 to insert money into the machine.");
             Console.WriteLine("Type 2 to select and purchase products.");
             Console.WriteLine("Type 3 to finish your transaction and recieve any change.");
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("(1) Insert Money");
@@ -242,10 +290,24 @@ namespace Capstone
         public void FeedMoneyMenu()
         {
             Console.Clear();
+
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("UMBRELLA CORP. PROUDLY PRESENTS THE");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(@" _ _              _            __ __        _    _        ___  ___  ___ 
+| | | ___ ._ _  _| | ___  ___ |  \  \ ___ _| |_ <_> ___  < . >|   ||   |
+| ' |/ ._>| ' |/ . |/ . \|___||     |<_> | | |  | |/ | ' / . \| / || / |
+|__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
+
+            Console.ResetColor();
+
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine("Here, you can insert all of your moneis!");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine($"Money in Machine:  ${CurrentBalance}");
+            Console.WriteLine($"Money in Machine:  {CurrentBalance}");
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine();
@@ -310,6 +372,16 @@ namespace Capstone
 
             Console.Clear();
 
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("UMBRELLA CORP. PROUDLY PRESENTS THE");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(@" _ _              _            __ __        _    _        ___  ___  ___ 
+| | | ___ ._ _  _| | ___  ___ |  \  \ ___ _| |_ <_> ___  < . >|   ||   |
+| ' |/ ._>| ' |/ . |/ . \|___||     |<_> | | |  | |/ | ' / . \| / || / |
+|__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
+
+            Console.ResetColor();
 
             //Select Product Instructions
             Console.WriteLine();
@@ -346,31 +418,19 @@ namespace Capstone
             //Product is sold 
             foreach (Product product in Stock)
             {
-
-                //{
-                //    // Threw custom exception
-                //    try
-                //    {
-                //        if (slotCode != product.SlotCode)
-                //        {
-                //            throw new PurchaseCodeInvalidException($"'{slotCode}' is an invalid slot. Please enter a valid code! ");
-                //        }
-                //        break;
-                //    }
-                //    catch (PurchaseCodeInvalidException ex)
-                //    {
-                //        Console.Clear();
-                //        Console.WriteLine(ex.Message);
-                //    }
-                //}
-
                 if (slotCode.ToUpper() == product.SlotCode && product.Supply > 0 && product.Price < CurrentBalance)
                 {
-                    //Log.AmountBeforeAction = CurrentBalance;
-                    //Log.LogAction = $"{product.BrandName} {product.SlotCode}";
+                    Logger purchaseLog = new Logger();
+                    purchaseLog.LogAction = $"{product.BrandName} {product.SlotCode}";
+                    purchaseLog.AmountBeforeAction = CurrentBalance;
+
+
+                    TrackSpending(product.Price);
+
                     SpendMoney(product.Price);
                     product.Supply -= 1;
-                    TrackSpending(product.Price);
+
+                    Console.Clear();
 
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Cyan;
@@ -378,11 +438,13 @@ namespace Capstone
                     Console.ResetColor();
                     Console.WriteLine();
 
-                    //Log.LogIt();
+                    purchaseLog.AmountAfterAction = CurrentBalance;
+                    purchaseLog.LogIt();
                 }
 
                 else if (slotCode.ToUpper() == product.SlotCode && product.Supply == 0)
                 {
+                    Console.Clear();
                     Console.WriteLine();
                     Console.WriteLine($"{(product.BrandName).ToUpper()} IS");
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -409,6 +471,7 @@ namespace Capstone
                         Console.ResetColor();
                     }
 
+                    Console.Clear();
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"You DO NOT have enough money to purchase {product.BrandName}!");
@@ -458,10 +521,25 @@ namespace Capstone
         public void FinishTransaction()
         {
             Console.Clear();
+
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("UMBRELLA CORP. PROUDLY PRESENTS THE");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(@" _ _              _            __ __        _    _        ___  ___  ___ 
+| | | ___ ._ _  _| | ___  ___ |  \  \ ___ _| |_ <_> ___  < . >|   ||   |
+| ' |/ ._>| ' |/ . |/ . \|___||     |<_> | | |  | |/ | ' / . \| / || / |
+|__/ \___.|_|_|\___|\___/     |_|_|_|<___| |_|  |_|\_|_. \___/`___'`___'");
+
+            Console.ResetColor();
+
+            Logger giveChangeLog = new Logger();
+
+            giveChangeLog.LogAction = "GIVE CHANGE:";
+            giveChangeLog.AmountBeforeAction = CurrentBalance;
+
             ReturnChange(CurrentBalance);
 
-            //Log.AmountBeforeAction = CurrentBalance;
-            //Log.LogAction = "GIVE CHANGE:";
 
 
 
@@ -469,8 +547,6 @@ namespace Capstone
             Console.WriteLine($"Quarters: {Quarter}");
             Console.WriteLine($"Dimes: {Dime}");
             Console.WriteLine($"Nickels {Nickel}");
-
-
             Console.WriteLine();
             Console.WriteLine("Umbrella Corp thanks you for your monies.");
             Console.WriteLine();
@@ -484,7 +560,8 @@ namespace Capstone
             Console.WriteLine("Awaiting response...");
             Console.ResetColor();
 
-            //Log.LogIt();
+            giveChangeLog.AmountAfterAction = CurrentBalance;
+            giveChangeLog.LogIt();
 
             string returnToMain = Console.ReadLine();
 
@@ -496,32 +573,19 @@ namespace Capstone
 
             else if (returnToMain == "n" || returnToMain == "N")
             {
-                Console.WriteLine("Goodbye!");
-                Environment.Exit(0);
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("Umbrella Corp. thanks you for your trust...");
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Press any key to close this window.");
+                Console.WriteLine();
+
             }
 
-
-
-        }
-
-        // Log
-        public void LogIt()
-        {
-
-            const string relativeFileName = @"..\..\..\..\Log.txt";
-            string directory = Environment.CurrentDirectory;
-            string filename = Path.Combine(directory, relativeFileName);
-            string fullPath = Path.GetFullPath(filename);
-
-            DateTime now = DateTime.Now;
-
-            using (StreamWriter sw = File.AppendText(fullPath))
-            {
-
-                string logLine = $"{now.Date} {LogAction} ${AmountBeforeAction} ${CurrentBalance}";
-
-                sw.WriteLine(logLine);
-            }
+            else FinishTransaction();
 
         }
     }
